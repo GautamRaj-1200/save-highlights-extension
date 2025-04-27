@@ -54,8 +54,7 @@ async function summarizeAllHighlights() {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization:
-          "Bearer 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",
+        Authorization: "Bearer sss",
       },
       body: JSON.stringify({
         model: "gpt-4o-mini",
