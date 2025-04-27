@@ -1,5 +1,12 @@
 const container = document.getElementById("highlights-container");
 const clearAllBtn = document.getElementById("clear-all");
+const summarizeAllBtn = document.createElement("button");
+summarizeAllBtn.innerText = "Summarize All";
+summarizeAllBtn.style.width = "100%";
+summarizeAllBtn.style.marginTop = "10px";
+summarizeAllBtn.onclick = summarizeAllHighlights;
+
+container.parentElement.appendChild(summarizeAllBtn);
 
 function loadHighlights() {
   chrome.storage.local.get({ highlights: [] }, (result) => {
@@ -13,18 +20,12 @@ function loadHighlights() {
       const textDiv = document.createElement("div");
       textDiv.innerText = item.text;
 
-      const summarizeBtn = document.createElement("button");
-      summarizeBtn.className = "summarize-btn";
-      summarizeBtn.innerText = "Summarize";
-      summarizeBtn.onclick = () => summarizeText(item.text);
-
       const deleteBtn = document.createElement("button");
       deleteBtn.className = "delete-btn";
       deleteBtn.innerText = "Delete";
       deleteBtn.onclick = () => deleteHighlight(index);
 
       div.appendChild(textDiv);
-      div.appendChild(summarizeBtn);
       div.appendChild(deleteBtn);
 
       container.appendChild(div);
@@ -46,20 +47,23 @@ clearAllBtn.addEventListener("click", () => {
 
 loadHighlights();
 
-async function summarizeText(text) {
-  const response = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization:
-        "Bearer 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",
-    },
-    body: JSON.stringify({
-      model: "gpt-3.5-turbo",
-      messages: [{ role: "user", content: `Summarize this: ${text}` }],
-    }),
-  });
+async function summarizeAllHighlights() {
+  chrome.storage.local.get({ highlights: [] }, async (result) => {
+    const allText = result.highlights.map((item) => item.text).join("\n");
+    const response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:
+          "Bearer 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",
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        input: `Summarize the text: ${allText}`,
+      }),
+    });
 
-  const data = await response.json();
-  alert(data.choices[0].message.content);
+    const data = await response.json();
+    alert(data.output[0].content[0].text);
+  });
 }
