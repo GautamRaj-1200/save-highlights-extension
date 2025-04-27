@@ -1,0 +1,51 @@
+.highlight-popup {
+  position: absolute;
+  background: yellow;
+  color: blue;
+  padding: 5px 10px;
+  border: 1px solid black;
+  cursor: pointer;
+  z-index: 9999;
+  font-size: 14px;
+  border-radius: 5px;
+}
+.highlight-container {
+  width: 10rem;
+}
+
+.highlight-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+}
+
+.highlight-item button {
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+/* Style only the Summarize button */
+.highlight-item button.summarize-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+/* Style only the Delete button */
+.highlight-item button.delete-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+#clear-all {
+  margin-top: 10px;
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px;
+  width: 100%;
+  cursor: pointer;
+}
